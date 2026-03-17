@@ -1,0 +1,184 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    const int MAX = 100;
+
+    // User data
+    string regEmail[MAX];
+    string regPassword[MAX];
+    int regRole[MAX]; // 1 = dormer, 2 = staff
+    int userCount = 0;
+
+    // Leave pass data
+    string leaveName[MAX];
+    string leaveDate[MAX];
+    string timeOut[MAX];
+    string timeIn[MAX];
+    string reason[MAX];
+    string status[MAX]; // pending, approved, rejected
+    int leaveCount = 0;
+
+    int choice;
+
+    cout << "=== Dorm LeavePass System ===\n";
+
+    while(true)
+    {
+        cout << "\n1. Register\n2. Login\n3. Exit\nChoice: ";
+        cin >> choice;
+        cin.ignore();
+
+        // ================= REGISTER =================
+        if(choice == 1)
+        {
+            cout << "\n=== Register ===\n";
+
+            cout << "Enter Email: ";
+            getline(cin, regEmail[userCount]);
+
+            cout << "Enter Password: ";
+            getline(cin, regPassword[userCount]);
+
+            cout << "Enter Role (1 = Dormer, 2 = Staff): ";
+            cin >> regRole[userCount];
+            cin.ignore();
+
+            userCount++;
+
+            cout << "Registration Successful!\n";
+        }
+
+        // ================= LOGIN =================
+        else if(choice == 2)
+        {
+            string email, password;
+            bool found = false;
+            int userIndex;
+
+            cout << "\n=== Login ===\n";
+
+            cout << "Enter Email: ";
+            getline(cin, email);
+
+            cout << "Enter Password: ";
+            getline(cin, password);
+
+            // Check account
+            for(int i = 0; i < userCount; i++)
+            {
+                if(regEmail[i] == email && regPassword[i] == password)
+                {
+                    found = true;
+                    userIndex = i;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                cout << "Invalid login!\n";
+                continue;
+            }
+
+            // ================= DORMER =================
+            if(regRole[userIndex] == 1)
+            {
+                int dChoice;
+
+                cout << "\n=== Dormer Dashboard ===\n";
+
+                cout << "1. Submit Leave Pass\n2. View My Leave Passes\nChoice: ";
+                cin >> dChoice;
+                cin.ignore();
+
+                if(dChoice == 1)
+                {
+                    cout << "\n=== Submit Leave Pass ===\n";
+
+                    cout << "Enter Name: ";
+                    getline(cin, leaveName[leaveCount]);
+
+                    cout << "Enter Date: ";
+                    getline(cin, leaveDate[leaveCount]);
+
+                    cout << "Time Out: ";
+                    getline(cin, timeOut[leaveCount]);
+
+                    cout << "Expected Time In: ";
+                    getline(cin, timeIn[leaveCount]);
+
+                    cout << "Reason: ";
+                    getline(cin, reason[leaveCount]);
+
+                    status[leaveCount] = "Pending";
+
+                    leaveCount++;
+
+                    cout << "Leave Pass Submitted!\n";
+                }
+
+                else if(dChoice == 2)
+                {
+                    cout << "\n=== My Leave Passes ===\n";
+
+                    for(int i = 0; i < leaveCount; i++)
+                    {
+                        if(leaveName[i] == email) // simple link
+                        {
+                            cout << "\nDate: " << leaveDate[i];
+                            cout << "\nTime Out: " << timeOut[i];
+                            cout << "\nTime In: " << timeIn[i];
+                            cout << "\nReason: " << reason[i];
+                            cout << "\nStatus: " << status[i] << endl;
+                        }
+                    }
+                }
+            }
+
+            // ================= STAFF =================
+            else if(regRole[userIndex] == 2)
+            {
+                cout << "\n=== Staff Dashboard ===\n";
+
+                for(int i = 0; i < leaveCount; i++)
+                {
+                    cout << "\nLeave #" << i + 1;
+                    cout << "\nName: " << leaveName[i];
+                    cout << "\nDate: " << leaveDate[i];
+                    cout << "\nTime Out: " << timeOut[i];
+                    cout << "\nTime In: " << timeIn[i];
+                    cout << "\nReason: " << reason[i];
+                    cout << "\nStatus: " << status[i] << endl;
+
+                    if(status[i] == "Pending")
+                    {
+                        int action;
+                        cout << "1 = Approve, 2 = Reject: ";
+                        cin >> action;
+
+                        if(action == 1)
+                            status[i] = "Approved";
+                        else
+                            status[i] = "Rejected";
+                    }
+                }
+            }
+        }
+
+        else if(choice == 3)
+        {
+            cout << "Program Ended.\n";
+            break;
+        }
+
+        else
+        {
+            cout << "Invalid choice.\n";
+        }
+    }
+
+    return 0;
+}
