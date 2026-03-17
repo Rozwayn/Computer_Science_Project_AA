@@ -1,0 +1,16 @@
+# Limitations and Future Improvements
+
+## Limitations
+- Leave pass records are stored only temporarily in program memory. Closing the program clears all data.
+- No user authentication against a permanent database.
+- Staff can only view and approve/reject in the current session.
+- No advanced search, filtering, or reporting features.
+- Limited to console interface; no graphical interface is available.
+
+## Future Improvements
+- Add file-based or database storage to save leave pass records permanently.
+- Implement proper user registration and authentication for secure login.
+- Include search and filter options for dormers and staff.
+- Create a graphical user interface (GUI) for easier navigation.
+- Add automated reports and analytics of leave pass submissions.
+- Implement notification system for dormers when a leave pass is approved or rejected.
