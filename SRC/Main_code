@@ -1,0 +1,128 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX = 100;
+
+struct LeavePass {
+    string dormerName;
+    string dormerEmail;
+    string date;
+    string timeOut;
+    string expectedTimeIn;
+    string reason;
+    string status; // Pending / Approved / Rejected
+    string rejectionReason;
+};
+
+int main() {
+    int login;
+    string loginname, loginemail, loginpassword;
+    int loginrole;
+    int leavepass;
+
+    LeavePass leavePasses[MAX];
+    int totalLeavePass = 0;
+
+    cout << "=== Welcome to Inn 'n Out Leave Pass System ===" << endl;
+
+    while(true) {
+        cout << "\nLogin (1 = yes, 2 = no)? ";
+        cin >> login;
+        cin.ignore();
+
+        if(login == 2) {
+            cout << "Program Closed." << endl;
+            break;
+        }
+
+        if(login == 1) {
+            cout << "Enter Name: ";
+            getline(cin, loginname);
+            cout << "Enter Email: ";
+            getline(cin, loginemail);
+            cout << "Enter Password: ";
+            getline(cin, loginpassword);
+            cout << "Enter Role (1 = Dormer, 2 = Staff): ";
+            cin >> loginrole;
+            cin.ignore();
+
+            if(loginrole == 1) { // Dormer
+                cout << "\nWelcome Dormer " << loginname << "!" << endl;
+                cout << "Submit Leave Pass (1 = yes, 2 = no)? ";
+                cin >> leavepass;
+                cin.ignore();
+
+                if(leavepass == 1) {
+                    LeavePass newPass;
+                    newPass.dormerName = loginname;
+                    newPass.dormerEmail = loginemail;
+                    newPass.status = "Pending";
+
+                    cout << "Enter Date of Leave: ";
+                    getline(cin, newPass.date);
+                    cout << "Enter Time Out: ";
+                    getline(cin, newPass.timeOut);
+                    cout << "Enter Expected Time In: ";
+                    getline(cin, newPass.expectedTimeIn);
+                    cout << "Enter Reason: ";
+                    getline(cin, newPass.reason);
+
+                    leavePasses[totalLeavePass] = newPass;
+                    totalLeavePass++;
+
+                    cout << "Leave Pass Submitted Successfully!" << endl;
+                    cout << "Total Leave Passes Today: " << totalLeavePass << endl;
+                } else {
+                    cout << "No Leave Pass Submitted." << endl;
+                }
+            }
+
+            else if(loginrole == 2) { // Staff
+                cout << "\nWelcome Staff " << loginname << "!" << endl;
+
+                if(totalLeavePass == 0) {
+                    cout << "No leave passes recorded." << endl;
+                } else {
+                    for(int i = 0; i < totalLeavePass; i++) {
+                        cout << "\nDormer #" << i + 1 << endl;
+                        cout << "Name: " << leavePasses[i].dormerName << endl;
+                        cout << "Email: " << leavePasses[i].dormerEmail << endl;
+                        cout << "Date: " << leavePasses[i].date << endl;
+                        cout << "Time Out: " << leavePasses[i].timeOut << endl;
+                        cout << "Expected Time In: " << leavePasses[i].expectedTimeIn << endl;
+                        cout << "Reason: " << leavePasses[i].reason << endl;
+                        cout << "Status: " << leavePasses[i].status << endl;
+
+                        if(leavePasses[i].status == "Pending") {
+                            int decision;
+                            cout << "Approve (1) / Reject (2) / Skip (3): ";
+                            cin >> decision;
+                            cin.ignore();
+
+                            if(decision == 1) {
+                                leavePasses[i].status = "Approved";
+                                cout << "Leave Pass Approved." << endl;
+                            } else if(decision == 2) {
+                                leavePasses[i].status = "Rejected";
+                                cout << "Enter Rejection Reason: ";
+                                getline(cin, leavePasses[i].rejectionReason);
+                                cout << "Leave Pass Rejected." << endl;
+                            } else {
+                                cout << "Skipped." << endl;
+                            }
+                        }
+                    }
+                }
+            }
+
+            else {
+                cout << "Invalid Role." << endl;
+            }
+        } else {
+            cout << "Invalid choice." << endl;
+        }
+    }
+
+    return 0;
+}
